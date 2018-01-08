@@ -1,0 +1,43 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django</title>
+    <link rel="stylesheet" type="text/css" href="{% static "css/foundation.css" %}">
+</head>
+<body>
+    <div class="fixed">
+      <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1><a href="/">Мой блог</a></h1>
+        </li>
+         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Right Nav Section -->
+        <ul class="right">
+            {% if username %}
+                <li><a href="/auth/logout/">Выйти ({{ username }})</a> </li>
+            {% else %}
+                <li class="active"><a href="/auth/login/">Войти</a></li>
+            {% endif %}
+
+        </ul>
+      </section>
+      </nav>
+    </div>
+<br>
+<br>
+<br>
+
+<div class="row">
+{% block article %}{% endblock %}
+{% block login %}{% endblock %}
+</div>
+</body>
+</html>

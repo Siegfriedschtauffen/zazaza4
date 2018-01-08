@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+
+{% block article %}
+<h4>{{ article.article_date }}</h4>
+<h2>{{ article.article_title }}</h2>
+    <div>
+    {% if article.article_image %}
+        <img src="{{ MEDIA_URL }} {{ article.article_image.url }}">
+    {% endif %}
+    </div>
+
+<p>{% autoescape off%}{{ article.article_text }}{% endautoescape %}</p>
+
+<hr>
+    <div class="large-offset-1 large-8 columns">
+<p>Комментарии</p>
+    <div height="1" style="border-bottom: 1px dotted #000033; "></div>
+{% for comment in comments %}
+   <p>{{ comment.comments_text }}</p>
+    <p align="right"> {{ comment.comments_author.username}} -{{comment.comments_date}}</p>
+{% endfor %}
+   <div class="row">
+        <div class="large-5 large-offset-5 columns">
+            <ul class="pagination">
+                {% if comments.has_previous %}
+                    <li class="arrow"><a href="/articles/{{ article.id }}/get/{{ comments.previous_page_number }}/">&laquo;</a></li>
+                {% else %}
+                    <li class="arrow unavailable"><a href="">&laquo;</a></li>
+                {% endif %}
+                {% for page in comments.paginator.page_range %}
+                    {% if page == comments.number %}
+                        <li class="current"><a href="/articles/{{ article.id }}/get/{{ page }}/">{{ page }}</a></li>
+                    {% else %}
+                        <li><a href="/articles/{{ article.id }}/get/{{ page }}/">{{ page }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if comments.has_next %}
+                    <li class="arrow"><a href="/articles/{{ article.id }}/get/{{ comments.next_page_number }}/">&raquo;</a></li>
+                {% else %}
+                    <li class="arrow unavailable"><a href="">&raquo;</a></li>
+
+                {% endif %}
+            </ul>
+        </div>
+   </div>
+    {% if username %}
+    <form action="/articles/addcomment/{{ article.id }}/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" class="button" value="Добавить комментарий">
+    </form>
+    {% endif %}
+    </div>
+{% endblock %}
